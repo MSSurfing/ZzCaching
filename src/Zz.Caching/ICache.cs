@@ -1,4 +1,4 @@
-﻿using Zz.Caching.Keys;
+﻿using Zz.Caching.Components;
 
 namespace Zz.Caching
 {
