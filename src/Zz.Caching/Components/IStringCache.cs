@@ -17,11 +17,10 @@ namespace Zz.Caching.Components
     ///         set key1 ''  ，即设key1 为 空值
     ///         strlen key1 得到 0，可能会被当作 key1 不存在
     ///         setnx key1 'value' ，结果 会一直失败，因为 key1 是存在的
-    /// 
-    ///     因此 在实现封装时，应避免 set 空值，这一块 StackExchange.Redis 做得很好
+    ///         
     /// 
     /// </remarks>
-    public interface IStringCache
+    public interface IStringCache //: IKeyCache
     {
         #region Get or Set
         /// <summary>

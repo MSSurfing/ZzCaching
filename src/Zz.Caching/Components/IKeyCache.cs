@@ -1,5 +1,14 @@
-﻿namespace Zz.Caching.Components
+﻿using System;
+using System.Collections.Generic;
+
+namespace Zz.Caching.Components
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <remarks>
+    /// 1、不提供 keys 操作
+    /// </remarks>
     public interface IKeyCache
     {
         /// <summary>
@@ -83,6 +92,8 @@
         /// </summary>
         /// <param name="pattern"></param>
         /// <returns></returns>
+        /// <remarks>https://redis.io/commands/keys</remarks>
+        [Obsolete("大数据量时，建议使用 IEnumerable<string> ScanKeys(string pattern, int pageSize)", false)]
         string[] Keys(string pattern);
 
         /// <summary>
@@ -91,7 +102,43 @@
         /// <param name="database"></param>
         /// <param name="pattern"></param>
         /// <returns></returns>
+        [Obsolete("大数据量时，建议使用 IEnumerable<string> ScanKeys(int database, string pattern, int pageSize)", false)]
         string[] Keys(int database, string pattern);
+
+        /// <summary>
+        /// 迭代查找 匹配的key
+        /// </summary>
+        /// <param name="pattern"></param>
+        /// <param name="pageSize">每次迭代请求的个数（Redis中该参数不够精确，每次返回数量的可能或多或少）</param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Scan方法会分多次请求，每次请求 <paramref name="pageSize"/> 个数据分多次请求直到请求完所有数据。
+        /// 请求是内部实现的，开发者不感知，只需要：ScanKeys().ToList(); 
+        /// 数据量较大时 建议用方式
+        /// foreach(var key in ScanKeys()) 
+        /// {  
+        ///     /* code */ 
+        /// }
+        /// </remarks>
+        IEnumerable<string> ScanKeys(string pattern, int pageSize);
+
+        /// <summary>
+        /// 迭代查找 匹配的key
+        /// </summary>
+        /// <param name="database"></param>
+        /// <param name="pattern"></param>
+        /// <param name="pageSize">每次迭代请求的个数（Redis中该参数不够精确，每次返回数量的可能或多或少）</param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Scan方法会分多次请求，每次请求 <paramref name="pageSize"/> 个数据分多次请求直到请求完所有数据。
+        /// 请求是内部实现的，开发者不感知，只需要：ScanKeys().ToList(); 
+        /// 数据量较大时 建议用方式
+        /// foreach(var key in ScanKeys()) 
+        /// {  
+        ///     /* code */ 
+        /// }
+        /// </remarks>
+        IEnumerable<string> ScanKeys(int database, string pattern, int pageSize);
 
         // 不提供 PTTL 方法
 
